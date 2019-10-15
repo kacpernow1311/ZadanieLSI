@@ -1,0 +1,67 @@
+﻿@using DevExpress.Web.Mvc.UI;
+@using Zadanie_15_10_2019.Models;
+@using System.Web.UI.WebControls;
+
+@model List<ReportModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    function searchData() {
+        var data = {
+            localName: local.GetValue(),
+            from : fromDate.GetValueString(),
+            to: toDate.GetValueString()
+        }
+        $('#ReportGridViewData').load('@Url.Action("GridViewReload","Home")', data, function () {});
+    }
+</script>
+<div class="container">
+    <div class="row" style="text-align:center;">
+        <h2>Report</h2>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            @Html.DevExpress().ComboBox(settings =>
+               {
+                   settings.Properties.Caption = "Lokal";
+                   settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                   settings.Name = "local";
+                   settings.Width = Unit.Percentage(100);
+               }).BindList(ViewBag.Locals).GetHtml()
+            <br />
+            @Html.DevExpress().DateEdit(settings =>
+               {
+                   settings.Properties.Caption = "Od";
+                   settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                   settings.Name = "fromDate";
+                   settings.Properties.DisplayFormatString = "D";
+                   settings.Properties.EditFormatString = "D";
+                   settings.Date = new DateTime(2019, 10, 15);
+                   settings.Width = Unit.Percentage(100);
+                   settings.Properties.CalendarProperties.FastNavProperties.DisplayMode = FastNavigationDisplayMode.Inline;
+               }).GetHtml()
+            <br />
+            @Html.DevExpress().DateEdit(settings =>
+               {
+                   settings.Properties.Caption = "Do";
+                   settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                   settings.Name = "toDate";
+                   settings.Properties.DisplayFormatString = "D";
+                   settings.Properties.EditFormatString = "D";
+                   settings.Date = new DateTime(2019, 10, 15);
+                   settings.Width = Unit.Percentage(100);
+                   settings.Properties.CalendarProperties.FastNavProperties.DisplayMode = FastNavigationDisplayMode.Inline;
+               }).GetHtml()
+            <br />
+            <button type="button" class="btn btn-secondary" onclick="searchData()">Zatwierdź</button>
+        </div>
+        <div class="col-sm-9" id="ReportGridViewData">
+            @Html.Partial("ReportGridView", Model)
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,52 @@
+﻿@using Zadanie_15_10_2019.Models
+
+@model List<ReportModel>
+@{
+    Html.DevExpress().GridView<ReportModel>(settings =>
+    {
+        settings.Name = "ReportGridView";
+        settings.SettingsExport.FileName = string.Format("Test{0}", DateTime.Now.ToString("yyyy-MM-dd_hhmm"));
+        settings.KeyFieldName = "ID";
+
+        settings.CallbackRouteValues = new { Action = "ReportGridView" };
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = System.Web.UI.WebControls.Unit.Pixel(100);
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        settings.CommandColumn.AllowDragDrop = DefaultBoolean.False;
+
+        settings.Columns.Add(m => m.ExportName, column =>
+        {
+            column.Width = System.Web.UI.WebControls.Unit.Percentage(20);
+        });
+
+        settings.Columns.Add(m => m.ExportTime, column =>
+        {
+            column.Width = System.Web.UI.WebControls.Unit.Percentage(20);
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;  
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatString = "dd.MM.yyyy";  
+            (column.PropertiesEdit as DateEditProperties).EditFormatString = "dd.MM.yyyy";  
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true; 
+        });
+        settings.Columns.Add(m => m.ExportTime, column =>
+        {
+            column.Name = "ExportTime";
+            column.ColumnType = MVCxGridViewColumnType.DateEdit;  
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatString = "HH:mm:ss";  
+            (column.PropertiesEdit as DateEditProperties).EditFormatString = "HH:mm:ss";  
+            (column.PropertiesEdit as DateEditProperties).DisplayFormatInEditMode = true; 
+            column.Width = System.Web.UI.WebControls.Unit.Percentage(20);
+        });
+        settings.Columns.Add(m => m.UserName, column =>
+        {
+            column.Width = System.Web.UI.WebControls.Unit.Percentage(20);
+        });
+        settings.Columns.Add(m => m.LocalName, column =>
+        {
+            column.Width = System.Web.UI.WebControls.Unit.Percentage(20);
+        });
+
+    }).Bind(Model).GetHtml();
+}
+
